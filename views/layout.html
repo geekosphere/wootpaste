@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}{% endblock %} - {{ config['TITLE'] }}</title>
+  {% assets "css_all" %}
+  <link href="{{ ASSET_URL }}" rel="stylesheet" type="text/css" />
+  {% endassets %}
+  <link href="/pygments/{{ session['settings']['pygment_style'] }}.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript">
+    var wootpaste = wootpaste = wootpaste || {};
+    wootpaste.settings = {{ session['settings']|tojson }};
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div id="page">
+        <div id="header">
+          {% include '_navi.html' %}
+          <h1>{{ self.title() }}</h1>
+        </div>
+        <div id="body">
+          {% block body %}{% endblock %}
+        </div>
+
+        <div class="clear"></div>
+        <footer>
+          {#<a href="">about / contact</a>#}
+          <div>
+            <a href="#page">&uarr;</a>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="/js/sjcl/sjcl.js"></script>
+  <script type="text/javascript" src="/js/jquery/jquery-1.11.1.min.js"></script>
+  {% assets "js_all" %}
+  <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+  {% endassets %}
+</body>
+</html>

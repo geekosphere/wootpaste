@@ -1,0 +1,19 @@
+database:
+  uri: 'sqlite:///:memory:'
+logger:
+  loggers:
+    # if set to DEBUG will log SQL Queries:
+    'sqlalchemy.engine.base.Engine':
+      level: ERROR
+      handlers: [console]
+    flask:
+      level: ERROR
+      handlers: [console]
+    wootpaste:
+      level: ERROR
+      handlers: [console]
+flask:
+  TESTING: true
+  WTF_CSRF_ENABLED: false
+  CSRF_ENABLED: false
+

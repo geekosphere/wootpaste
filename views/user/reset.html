@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block title %}Password Reset{% endblock %}
+{% block body %}
+
+<p>Give a username or email to reset the password.</p>
+
+<form method="POST" action="{{ url_for('frontend.password_reset') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> 
+
+  {% if form.errors %}
+    <ul class="errors">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ form[field_name].name }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+  {% endif %}
+
+  <label for="username">Username/Email</label>
+  <div>
+    {{ form.username(class='autofocus', autofocus=True) }}
+  </div>
+
+  <button type="submit" name="submit" class="button_secondary">Reset Password</button>
+</form>
+
+{% endblock %}
+
+

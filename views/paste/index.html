@@ -1,0 +1,13 @@
+{% import 'macros/_paste.html' as _paste %}
+{% import 'macros/_pagination.html' as _pagination %}
+{% extends 'layout.html' %}
+{% block title %}Public Pastes{% endblock %}
+{% block body %}
+
+{% for paste in pastes %}
+  {{ _paste.show(paste, single_paste=False) }}
+{% endfor %}
+{{ _pagination.show(pastes) }}
+
+{% endblock %}
+

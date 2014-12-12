@@ -1,0 +1,16 @@
+<div class="navigation">
+  <ul>
+    <li><a href="{{ url_for('frontend.paste_create') }}">new</a></li>
+    <li><a href="{{ url_for('frontend.paste_index') }}">list</a></li>
+    <li><a href="{{ url_for('frontend.settings') }}">settings</a></li>
+    {% if not 'username' in session %}
+    <li><a href="{{ url_for('frontend.signup') }}">sign up</a></li>
+    <li><a href="{{ url_for('frontend.login') }}">login</a></li>
+    {% endif %}
+    {% if 'username' in session %}
+    <li>logged in as <a href="{{ url_for('frontend.user_paste_index', username=session['username']) }}">{{ session['username'] }}</a></li>
+    <li><a href="{{ url_for('frontend.logout') }}">logout</a></li>
+    {% endif %}
+  </ul>
+</div>
+

@@ -1,0 +1,93 @@
+# wootpaste configuration
+# NOTE: This file will be merged with local.yaml,
+# place instance specific configurations in local.yaml
+---
+database:
+  uri: 'sqlite:///wootpaste.db' # do not forget to init: 'alembic upgrade head'
+# irc announcements use rubybot webservice to issue a 'say' command
+#  infos: https://github.com/4poc/rbot/wiki/Web-Service
+irc_announce:
+  active: false
+  channel: '#test'
+  username: 'changeme'
+  password: 'changeme'
+  uri: 'http://example.com/dispatch'
+# configure logging using the python logging dictschema:
+#  docs: http://docs.python.org/2/library/logging.config.html#logging-config-dictschema
+# the relevant loggers are: wootpaste, sqlalchemy and flask
+logger:
+  version: 1
+  formatters:
+    brief:
+      format: '%(message)s'
+    precise:
+      format: '%(asctime)s %(levelname)-8s %(name)-15s %(message)s'
+      datefmt: '%Y-%m-%d %H:%M:%S'
+  loggers:
+    # if set to DEBUG will log SQL Queries:
+    'sqlalchemy.engine.base.Engine':
+      level: ERROR
+      handlers: [console]
+    passlib:
+      level: ERROR
+      handlers: [console]
+    flask:
+      level: DEBUG
+      handlers: [console]
+    wootpaste:
+      level: DEBUG
+      handlers: [console]
+  handlers:
+    console:
+      class      : logging.StreamHandler
+      formatter  : precise
+      level      : DEBUG
+      stream     : ext://sys.stdout
+paste:
+  max_lines: 30
+  primary_languages:
+    - auto 
+    - text 
+    - go 
+    - rust 
+    - d 
+    - c 
+    - cpp 
+    - java 
+    - clojure 
+    - haskell 
+    - perl 
+    - python 
+    - rb 
+    - php 
+    - bash 
+    - sql 
+    - lua 
+    - tcl
+    - dart 
+    - js 
+    - css 
+    - html 
+    - xml
+    - yaml
+    - json
+    - irc 
+# the following options are merged with the flask instance's config:
+#  flask makes those options available in jinja2 templates using config['TITLE'] etc.
+flask:
+  DEBUG: true
+  TITLE: 'your wootpaste instance title'
+  SECRET_KEY: 'if you dont change this you get hacked!'
+  SESSION_COOKIE_NAME: 'wps'
+  MAIL_SERVER: 'mail.example.org'
+  MAIL_PORT: 25
+  MAIL_USE_TLS: false
+  MAIL_USE_SSL: false
+  MAIL_USERNAME: 'user'
+  MAIL_PASSWORD: 'pass'
+password_reset:
+  sender: 'apoc@geekosphere.org'
+  subject: 'Password Reset - wootpaste'
+  content: "To reset your password visit this link:\n{url}\n\nOr use this token: {token}\n\nThanks for using wootpaste!"
+
+

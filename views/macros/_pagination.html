@@ -1,0 +1,24 @@
+{% macro show(pagination) -%}
+
+<div class="pagination">
+  <ul>
+  {% if pagination.get_prev() %}
+    <li><a href="{{ pagination.get_prev() }}">&laquo;</a></li>
+  {% endif %}
+  {% for href, val in pagination.get_links() %}
+    <li>
+      {% if href %}
+      <a href="{{ href }}">{{ val }}</a>
+      {% else %}
+      <span>{{ val }}</span>
+      {% endif %}
+    </li>
+  {% endfor %}
+  {% if pagination.get_next() %}
+    <li><a href="{{ pagination.get_next() }}">&raquo;</a></li>
+  {% endif %}
+  </ul>
+</div>
+
+{%- endmacro %}
+

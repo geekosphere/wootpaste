@@ -1,0 +1,15 @@
+{% import 'macros/_paste.html' as _paste %}
+{% extends 'layout.html' %}
+{% block title %}
+  {% if paste.title %}
+    {{ paste.title  }}
+  {% else %}
+    Show Paste
+  {% endif %}
+{% endblock %}
+{% block body %}
+
+{{ _paste.show(paste) }}
+
+{% endblock %}
+

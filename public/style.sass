@@ -1,0 +1,372 @@
+
+input[name="srekcufmaps"]
+  display: none
+
+@mixin inline_list($sep)
+  ul
+    list-style: none
+    padding: 0
+    margin: 0
+    li
+      display: inline
+    li:before
+      padding: 0 4px 0 0
+      content: $sep
+    li:first-child:before
+      padding: 0
+      content: ""
+
+@mixin middot_list
+  @include inline_list("\00b7")
+
+@mixin pipe_list
+  @include inline_list("|")
+
+@mixin border_radius
+  border-radius: 3px
+  -webkit-border-radius: 3px
+  -moz-border-radius: 3px
+
+/* prevents padding from influencing sizes */
+@mixin box_sizing_border_box
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+
+// $font_family: Helvetica, arial, freesans, clean, sans-serif 
+$font_family: "Helvetica Neue", Helvetica, Arial, sans-serif
+// $font_family_monospace: Consolas, "Liberation Mono", Courier, monospace
+$font_family_monospace: Courier, monospace
+$size_monospace: 0.9em
+$paste_line_height: 1.4
+$content_margin: 20px
+$border_color: #e7e7e7
+$box_background: darken(#f7f7f7, 2%)
+
+body
+  font-family: $font_family
+  font-size: 1.1em
+  // ^- large for small screens/mobile
+
+// make container width and font size responsive
+@media(min-width: 1000px)
+  body
+    font-size: 0.8em
+  .container
+    width: 900px
+
+#header
+  //position: relative
+  .navigation
+    margin-right: $content_margin
+    //position: absolute
+    //right: 0
+    //top: 0
+    // bottom: 0 <- not sure
+    float: right
+    @include pipe_list
+  h1
+    margin-left: $content_margin
+
+#body
+  padding: 0 $content_margin
+
+// center container
+.container
+  margin: 0 auto
+
+// exclude the padding for input/textarea width
+input, textarea, #content_ace
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+
+input, button, textarea, #content_ace
+  border: 1px solid $border_color
+  @include border_radius
+
+select.block
+  display: block
+
+input[type="text"], input[type="password"]
+  min-width: 280px
+  padding: 4px
+
+.help
+  color: #737373
+  display: block
+  margin: 5px 10px 10px 5px
+
+pre
+  margin: 0
+
+code, pre, textarea
+  font-family: $font_family_monospace
+  font-size: $size_monospace
+
+a
+  color: #2980b9
+  text-decoration: none
+  &:hover
+    text-decoration: none
+    color: #1a5175
+
+a.dark_link
+  color: #666
+  &:hover
+    color: #333
+
+button
+  display: inline-block
+  margin-bottom: 0px
+  font-weight: bold
+  text-align: center
+  vertical-align: middle
+  cursor: pointer
+  border: 1px solid #ccc
+  white-space: nowrap
+  padding: 6px 12px
+  font-size: 1.02em
+  line-height: 1.42857
+  margin-top: 5px
+  margin-bottom: 5px
+  color: #666
+  background-color: #fff
+  border-color: #ccc
+  &:active, &:hover
+    color: #666
+    background-color: #ebebeb
+    border-color: #adadad
+
+.button_secondary
+  color: #fff
+  background-color: #428bca
+  border-color: #357ebd
+  &:active, &:hover
+    color: #fff
+    background-color: #3276b1
+    border-color: #285e8e
+
+.clear
+  clear: both
+
+footer
+  padding: 30px 5px
+  text-align: center
+  div
+    float: right
+
+#page
+
+input, select
+  font-family: $font_family
+  font-size: 1.0em
+
+
+input#title
+  width: 100%
+  padding: 10px
+
+//  margin: 10px 10px 0 10px
+textarea, #content_ace
+  width: 100%
+  padding: 10px
+  height: 380px
+  margin-top: 5px
+#content_ace
+  display: none
+
+
+.input_options
+  select
+    float: right
+
+.check_options
+  display: block
+  label
+    display: block
+    margin-top: 4px
+    margin-left: 3px
+    padding-left: 15px
+    text-indent: -15px
+  input
+    width: 13px
+    height: 13px
+    padding: 0
+    margin: 0
+    vertical-align: bottom
+    position: relative
+    top: -1px
+    *overflow: hidden
+
+label
+  display: block
+.inline
+  display: inline
+
+.left
+  float: left
+  label[for="language"], label[for="expire_in"] 
+    margin: 5px 4px 0px 4px
+  label
+    vertical-align: baseline
+.right
+  float: right
+  //button[name="submit_private"]
+  //background: #f7f9e4
+  button[name="submit_public"]
+    margin-right: 0
+
+.paste_title
+  margin: 0
+  border: 1px solid $border_color
+  border-bottom: 0px
+  background-color: white
+  padding: 5px
+
+  h2
+    display: inline
+    font-size: 1em
+    margin: 0
+    padding: 0
+    color: #4183c4
+    font-weight: bold
+.sourceheader
+  display: table
+  width: 100%
+  @include box_sizing_border_box
+  background-color: $box_background
+  border: 1px solid $border_color
+  border-bottom: 0px
+  .paste_meta, .paste_info
+    @include middot_list
+    padding: 5px
+  .paste_meta
+    display: table-cell
+    .paste_private
+      color: #a94442
+      font-style: italic
+  .paste_info
+    display: table-cell
+    text-align: right
+    color: #999999
+
+.paste_visits
+  color: #666
+  font-style: italic
+
+.pygment_style_preview
+  .source
+    padding: 5px !important
+
+.paste
+  margin-bottom: 20px
+  width: 100%
+
+.paste_options
+  .right
+    text-align: right
+    .submit_hint
+      font-size: 0.8em
+      font-style: italic
+
+// the highlighted source code
+.source_container
+  .source
+    border: 1px solid $border_color
+    margin: 0
+    padding: 0
+    pre
+      //padding: 12px 8px
+      line-height: $paste_line_height
+      letter-spacing: 0.015em
+  .sourcetable
+    .source
+      padding: 0 !important
+      border: 0 !important
+    .linenos
+      border-right: 1px solid #eee
+      color: #aaa
+      line-height: $paste_line_height
+      letter-spacing: 0.015em
+      text-align: right
+      min-width: 27px
+      padding: 3px 6px
+      -webkit-box-sizing: border-box
+      -moz-box-sizing: border-box
+      box-sizing: border-box
+      -webkit-user-select: none
+      -moz-user-select: none
+      -ms-user-select: none
+      user-select: none
+    .code
+      line-height: 1.4
+      width: 100%
+      padding-left: 12px
+.source_linenos
+  overflow: auto
+  border: 1px solid $border_color
+.source_nolinenos
+  .source
+    padding: 5px
+    pre
+      white-space: pre-wrap
+      white-space: -moz-pre-wrap
+      white-space: -pre-wrap
+      white-space: -o-pre-wrap
+      word-wrap: break-word
+
+
+// default table look: border around it and striped
+table.striped_table
+  border: 1px solid $border_color
+  border-spacing: 0
+  border-collapse: collapse 
+  td, th
+    text-align: left
+    padding: 8px
+  tr:nth-child(odd)
+    td, th
+      background-color: #f9f9f9
+
+.pagination
+  text-align: center
+  ul
+    display: inline-block
+    margin: 20px 0
+    //border-radius: 4px
+    li
+      display: inline
+      margin: 0
+      padding: 0
+      span, a
+        font-size: 14px
+        display: inline-block
+        position: relative
+        float: left
+        padding: 6px 12px
+        margin-left: -1px
+        line-height: 1.42857143
+        text-decoration: none
+        border: 1px solid #ddd
+        background-color: #fff
+      span
+        color: #999
+
+      
+.source_showfull
+  padding: 2px
+  border: 1px solid #e7e7e7
+  text-align: center
+  border-top-width: 0
+  background-color: $box_background
+  font-size: 9px
+
+.button_login
+  vertical-align: bottom
+
+.password_reset
+  padding-bottom: 6px
+  display: inline-block
+
+

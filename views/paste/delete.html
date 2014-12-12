@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block title %}Delete Paste{% endblock %}
+{% block body %}
+
+<form method="POST" action="{{ request.url }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> 
+
+  <p>Please confirm that you want to permanently and irrevocably remove the paste with ID <code>{{ paste.id }} / {{ paste.key }}</code>.</p>
+
+  <button type="submit" name="submit" class="button_secondary">Delete!</button>
+</form>
+
+{% endblock %}
+

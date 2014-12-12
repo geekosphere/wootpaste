@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% block title %}Pastebin Settings{% endblock %}
+{% block body %}
+
+<p>
+  {% if 'username' in session %}
+  Customized settings are stored in your user account.
+  {% else %}
+  Customized settings are saved in a cookie, sign up to make them permanent.
+  {% endif %}
+</p>
+
+<form method="POST" action="{{ url_for('frontend.settings') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> 
+
+  {% if form.errors %}
+    <ul class="errors">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ form[field_name].name }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+  {% endif %}
+
+  <label>{{ form.ace }} use Ace editor</label>
+  <p class="help">Activate the javascript code editor <a href="http://ace.c9.io/" rel="external">Ace</a> for paste content.</p>
+
+  <label>{{ form.pygment_linenos }} line numbers</label>
+  <p class="help">Show code with line numbers, will not break long lines.</p>
+
+  {{ form.pygment_style.label }}
+  {{ form.pygment_style(class='block') }}
+
+  <div class="source_container pygment_style_preview">
+    {{ "#include<stdio.h>\nint main() {\n  printf(\"Hello World!\\n\");\n  return 0;\n}\n"|highlight('c')|safe }}
+  </div>
+
+  <button type="submit" name="reset">Reset Defaults</button>
+  <button type="submit" name="save" class="button_secondary">Save</button>
+</form>
+
+{% endblock %}
+

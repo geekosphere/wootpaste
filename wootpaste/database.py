@@ -1,0 +1,19 @@
+# -*- coding: utf-8 -*-
+
+from wootpaste.config import config
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
+#import logging
+#logging.basicConfig()
+#logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
+
+engine = create_engine(config['database.uri'], convert_unicode=True)
+db_session = scoped_session(sessionmaker(autocommit=False,
+                                      autoflush=False,
+                                      bind=engine))
+Base = declarative_base()
+Base.query = db_session.query_property()
+

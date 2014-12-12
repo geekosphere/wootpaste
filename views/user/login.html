@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% block title %}Login{% endblock %}
+{% block body %}
+
+<form method="POST" action="{{ url_for('frontend.login') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> 
+
+  {% if form.errors %}
+    <ul class="errors">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ form[field_name].name }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+  {% endif %}
+
+  {{ form.username.label }}
+  <div>
+    {{ form.username(class='autofocus', autofocus=True) }}
+  </div>
+
+  {{ form.password.label }}
+  <div>
+    {{ form.password }}
+  </div>
+
+  <button type="submit" name="submit" class="button_secondary button_login">Login</button>
+  <div class="password_reset">
+    <a href="{{ url_for('frontend.password_reset') }}">Forgot Password?</a>
+  </div>
+</form>
+
+{% endblock %}
+
+

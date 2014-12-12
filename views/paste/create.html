@@ -1,0 +1,60 @@
+{% import 'macros/_ace.html' as _ace %}
+{% extends 'layout.html' %}
+{% block title %}New Paste{% endblock %}
+{% block body %}
+
+<form method="POST" name="paste" action="{{ url_for('frontend.paste_create') }}" id="paste_form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> 
+
+  {% if form.errors %}
+    <ul class="errors">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ form[field_name].name }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+  {% endif %}
+
+  {{ form.title(placeholder='Paste description...') }}
+
+  <!-- paste content textarea is always present, it has the id/name content,
+        the ace editor's div (if active) has the id content_ace.  -->
+
+  {% if session.settings['ace'] %}
+    {{ _ace.show_ace_editor() }}
+  {% endif %}
+
+  <!-- ace copies an always-uptodate version of the paste into this textarea -->
+  {{ form.content(class='autofocus', autofocus=True) }}
+
+  <div class="paste_options">
+    <div class="left">
+      {{ form.language.label }}
+      {{ form.language }}
+
+      <label for="expire_in">Expire</label>
+      {{ form.expire_in }}
+      {{ form.expire_views }}
+
+      <div class="check_options">
+        <label>{{ form.encrypted }} client-side encrypted</label>
+        <label>{{ form.xkcd_ids }} xkcd-style ids</label>
+        {% if g.config.irc_announce.active %}
+        <label>{{ form.irc_announce }} announce in {{ g.config.irc_announce.channel }}</label>
+        {% endif %}
+        <label>{{ form.private }} create a private, unlisted paste</label>
+      </div>
+    </div>
+
+    <input type="input" name="srekcufmaps" value="" />
+
+    <div class="right">
+      <button type="submit" name="submit" id="paste_submit">Create Paste</button>
+      <div class="submit_hint">Press Shift+Enter to submit.</div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
+

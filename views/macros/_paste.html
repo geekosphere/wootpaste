@@ -1,0 +1,77 @@
+{% macro show(paste, single_paste=True) -%}
+
+<!--
+<div class="paste_meta">
+  <code>{{ paste.key }}</code> &middot; created at {{ paste.created_at|format_date }} &middot; <a href="">edit</a> &middot; <a href="">delete</a>
+</div>
+-->
+
+<div class="paste">
+  {% if paste.title and not single_paste %}
+  <div class="paste_title">
+    <h2><a href="{{ url_for('frontend.paste_show', key=paste.key) }}" title="{{ paste.title }}">{{ paste.title }}</a></h2>
+  </div>
+  {% endif %}
+  <div class="sourceheader">
+    <div class="paste_meta">
+      <ul>
+        <li>
+          created at <a href="{{ url_for('frontend.paste_show', key=paste.key) }}" class="paste_date dark_link">{{ paste.created_at|format_date }}</a>
+          {% if paste.owner_user %}
+          by <a href="{{ url_for('frontend.user_paste_index', username=paste.owner_user.username) }}" title="Show all pasts from {{paste.owner_user.username}}" class="dark_link">{{ paste.owner_user.username }}</a>
+          {% endif %}
+        </li>
+
+        <li class="paste_visits">{{ paste.visits }} views</li>
+
+        {% if paste.private %}
+          {% if paste.encrypted %}
+            <li class="paste_private">private and encrypted paste</li>
+          {% else %}
+            <li class="paste_private">private paste</li>
+          {% endif %}
+        {% endif %}
+
+        <li><a href="{{ url_for('frontend.paste_update', key=paste.key) }}">edit</a></li>
+
+        <li><a href="{{ url_for('frontend.paste_delete', key=paste.key) }}">delete</a></li>
+
+      </ul>
+    </div>
+    <div class="paste_info">
+      <ul>
+
+        {% if paste.language != 'auto' and paste.language != 'text' %}
+          <li>{{ paste.language|language_display_name(paste.content) }}</li>
+        {% endif %}
+
+        <li><a href="{{ url_for('frontend.paste_show', key=paste.key) }}" title="">view</a></li>
+
+        <li><a href="{{ url_for('frontend.paste_show', key=paste.key, mode='raw') }}" title="">raw</a></li>
+
+        <li><a href="{{ url_for('frontend.paste_show', key=paste.key, mode='download') }}" title="">download</a></li>
+
+      </ul>
+    </div>
+  </div>
+  <div class="source_container{% if not session.settings['pygment_linenos'] %} source_nolinenos{% else %} source_linenos{% endif %}">
+    {% set must_truncate = not single_paste and paste.must_truncate() %}
+    {% if paste.encrypted %}
+      <div class="source">
+        <pre class="encrypted_content">{{ paste.content|safe }}</pre>
+      </div>
+    {% else %}
+      {% if must_truncate %} 
+        {{ paste.truncate_content()|highlight(paste.language)|safe }}
+      {% else %}
+        {{ paste.content|highlight(paste.language)|safe }}
+      {% endif %} 
+    {% endif %}
+  </div>
+  {% if must_truncate %} 
+    <div class="source_showfull"><a href="{{ url_for('frontend.paste_show', key=paste.key) }}">» show all «</a></div>
+  {% endif %} 
+</div>
+
+{%- endmacro %}
+

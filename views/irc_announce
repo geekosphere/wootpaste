@@ -1,0 +1,22 @@
+
+{% set bold = "\002" %}
+{% set normal = "\017" %}
+
+{% if paste.owner_user %}
+
+    {{bold}}{{ paste.owner_user.username }}{{normal}} just pasted
+
+{% else %}
+
+    someone just {{bold}}pasted{{normal}}
+
+{% endif %}
+
+{% if paste.title and paste.title != '' %}
+
+    »{{ paste.title }}«
+
+{% endif %}
+
+- http://example.com/paste/{{ paste.key }}
+
