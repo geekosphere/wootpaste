@@ -34,9 +34,10 @@
           {% endif %}
         {% endif %}
 
-        <li><a href="{{ url_for('frontend.paste_update', key=paste.key) }}">edit</a></li>
-
-        <li><a href="{{ url_for('frontend.paste_delete', key=paste.key) }}">delete</a></li>
+        {% if paste|has_permission %}
+          <li><a href="{{ url_for('frontend.paste_update', key=paste.key) }}">edit</a></li>
+          <li><a href="{{ url_for('frontend.paste_delete', key=paste.key) }}">delete</a></li>
+        {% endif %}
 
       </ul>
     </div>

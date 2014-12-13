@@ -6,6 +6,8 @@ from pygments import highlight
 
 from flask import session
 
+from helpers import PasteHelper
+
 class ViewFilters(object):
     @staticmethod
     def register(app):
@@ -13,6 +15,7 @@ class ViewFilters(object):
         app.jinja_env.filters['highlight'] = ViewFilters.highlight
         app.jinja_env.filters['format_date'] = ViewFilters.format_date
         app.jinja_env.filters['language_display_name'] = ViewFilters.language_display_name
+        app.jinja_env.filters['has_permission'] = ViewFilters.has_permission
 
     @staticmethod
     def format_date(date):
@@ -43,4 +46,8 @@ class ViewFilters(object):
         formatter = HtmlFormatter(style=session['settings']['pygment_style'],
                 linenos=session['settings']['pygment_linenos'], cssclass="source")
         return highlight(code, lexer, formatter)
+
+    @staticmethod
+    def has_permission(paste):
+        return PasteHelper.has_permission(paste)
 

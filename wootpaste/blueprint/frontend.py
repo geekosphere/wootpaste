@@ -70,7 +70,7 @@ def handle_invalid_usage(error):
 def paste_create():
     form = PasteForm(request.form)
     if request.method == 'POST' and form.validate():
-        if request.form.get('email', '') != '':
+        if request.form.get('homepage', '') != '':
             return redirect('/')
         paste = Paste()
         form.populate_obj(paste)
@@ -105,6 +105,7 @@ def paste_update(key):
     #   - session sid must match
     # or- user must match
     paste = Paste.query.filter_by(key=key).one()
+    if not PasteHelper.has_permission(paste): return redirect(url_for('frontend.login')) 
     form = PasteForm(request.form, obj=paste)
     if request.method == 'POST' and form.validate():
         form.populate_obj(paste)
@@ -121,6 +122,7 @@ def paste_update(key):
 @blueprint.route('/delete/<key>', methods=['GET', 'POST'])
 def paste_delete(key):
     paste = Paste.query.filter_by(key=key).one()
+    if not PasteHelper.has_permission(paste): return redirect(url_for('frontend.login')) 
     if request.method == 'POST':
         db_session.delete(paste)
         db_session.commit()

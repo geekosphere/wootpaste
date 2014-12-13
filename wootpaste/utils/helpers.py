@@ -18,7 +18,7 @@ from wootpaste.models import *
 from wootpaste.utils import dict_merge
 from wootpaste.config import config
 
-from flask import session
+from flask import g, session
 from passlib.context import CryptContext
 
 from jinja2 import Template
@@ -111,6 +111,13 @@ class PasteHelper(object):
         requests.post(c['uri'], data={
             'username': c['username'], 'password': c['password'],
             'command': 'say %s %s' % (c['channel'], message)})
+
+    @staticmethod
+    def has_permission(paste):
+        if g.is_admin: return True
+        if paste.owner_session == SessionHelper.get_session_id(session): return True
+        if g.user and paste.owner_user_id == g.user.id: return True
+        return False
 
 class SessionHelper(object):
     @staticmethod
