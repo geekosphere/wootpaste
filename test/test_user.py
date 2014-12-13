@@ -1,6 +1,4 @@
 
-import os
-os.environ['ENV'] = 'test'
 from test import app, client
 from pprint import PrettyPrinter
 pprint = PrettyPrinter(indent=4).pprint
