@@ -6,19 +6,21 @@
 </div>
 -->
 
+{% if paste.title and not single_paste %}
+<div class="paste_title">
+  <h2><a href="{{ url_for('frontend.paste_show', key=paste.key) }}" title="{{ paste.title }}">{{ paste.title }}</a></h2>
+</div>
+{% endif %}
+
 <div class="paste">
-  {% if paste.title and not single_paste %}
-  <div class="paste_title">
-    <h2><a href="{{ url_for('frontend.paste_show', key=paste.key) }}" title="{{ paste.title }}">{{ paste.title }}</a></h2>
-  </div>
-  {% endif %}
   <div class="sourceheader">
     <div class="paste_meta">
       <ul>
         <li>
           created at <a href="{{ url_for('frontend.paste_show', key=paste.key) }}" class="paste_date dark_link">{{ paste.created_at|format_date }}</a>
           {% if paste.owner_user %}
-          by <a href="{{ url_for('frontend.user_paste_index', username=paste.owner_user.username) }}" title="Show all pasts from {{paste.owner_user.username}}" class="dark_link">{{ paste.owner_user.username }}</a>
+          by <a href="{{ url_for('frontend.user_paste_index', username=paste.owner_user.username) }}"
+            title="Show all pasts from {{paste.owner_user.username}}" class="dark_link">{{ paste.owner_user.username }}</a>
           {% endif %}
         </li>
 
