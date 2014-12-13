@@ -2,6 +2,7 @@
 # NOTE: This file will be merged with local.yaml,
 # place instance specific configurations in local.yaml
 ---
+force_ssl: false
 database:
   uri: 'sqlite:///wootpaste.db' # do not forget to init: 'alembic upgrade head'
 # irc announcements use rubybot webservice to issue a 'say' command
