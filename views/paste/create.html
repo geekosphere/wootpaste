@@ -28,6 +28,8 @@
   <!-- ace copies an always-uptodate version of the paste into this textarea -->
   {{ form.content(class='autofocus', autofocus=True) }}
 
+  <input type="input" name="email" value="" />
+
   <div class="paste_options">
     <div class="left">
       {{ form.language.label }}
@@ -46,8 +48,6 @@
         <label>{{ form.private }} create a private, unlisted paste</label>
       </div>
     </div>
-
-    <input type="input" name="srekcufmaps" value="" />
 
     <div class="right">
       <button type="submit" name="submit" id="paste_submit">Create Paste</button>

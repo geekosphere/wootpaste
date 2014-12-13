@@ -70,7 +70,7 @@ def handle_invalid_usage(error):
 def paste_create():
     form = PasteForm(request.form)
     if request.method == 'POST' and form.validate():
-        if request.form.get('srekcufmaps', '') != '':
+        if request.form.get('email', '') != '':
             return redirect('/')
         paste = Paste()
         form.populate_obj(paste)
