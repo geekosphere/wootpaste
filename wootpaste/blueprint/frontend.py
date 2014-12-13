@@ -21,6 +21,9 @@ from functools import wraps
 from math import ceil
 import datetime
 import pytz
+import json
+import logging
+log = logging.getLogger('wootpaste')
 
 blueprint = Blueprint('frontend', __name__, template_folder='templates')
 
@@ -70,7 +73,9 @@ def handle_invalid_usage(error):
 def paste_create():
     form = PasteForm(request.form)
     if request.method == 'POST' and form.validate():
-        if request.form.get('homepage', '') != '':
+        log.debug('create field data: ' + json.dumps(request.form))
+        if request.form.get('subject', '') != '':
+            log.info('blocked spam, detected non-empty hidden field')
             return redirect('/')
         paste = Paste()
         form.populate_obj(paste)
