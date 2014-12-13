@@ -3,6 +3,7 @@ Flask-WTF
 Flask-Assets
 Flask-Script
 Flask-Mail
+Werkzeug
 jsmin
 cssmin
 sass
