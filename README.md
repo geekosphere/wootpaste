@@ -5,6 +5,8 @@ This is the source code for the [paste.geekosphere.org](https://paste.geekospher
 
 ## Install
 
+sass executable needs manual install. (gem install sass)
+
 ```
 % mkvirtualenv wootpaste
 % workon wootpaste
@@ -17,6 +19,14 @@ This is the source code for the [paste.geekosphere.org](https://paste.geekospher
 ```
 pip install nose
 nosetests test
+```
+
+## Database
+
+```
+CREATE USER wootpaste WITH PASSWORD 'pw';
+CREATE DATABASE wootpaste;
+GRANT ALL PRIVILEGES ON DATABASE wootpaste to wootpaste;
 ```
 
 
