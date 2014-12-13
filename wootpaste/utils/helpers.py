@@ -143,9 +143,9 @@ class SessionHelper(object):
 
         # default settings: this might introduce new settings!
         settings = {
-                'ace': True,
+                'ace': False,
                 'pygment_style': 'trac',
-                'pygment_linenos': True,
+                'pygment_linenos': False,
                 }
 
         if resetDefaults:
