@@ -50,6 +50,7 @@ wootpaste.init = function () {
       }
     }
   });
+  $('input[name="subject"]').hide();
 };
 
 wootpaste.initAce = function () {
