@@ -285,12 +285,3 @@ def stats_json():
     }
     return jsonify(**stats)
 
-from functools import partial
-
-def legacy_show(key):
-    return redirect(url_for('frontend.paste_show', key=key, mode=None))
-
-for paste in Paste.query.filter_by(legacy=True).all():
-    route = u'/' + paste.key
-    blueprint.add_url_rule(route, 'legacy_show_'+paste.key, partial(legacy_show, key=paste.key))
-

@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import os
+from functools import partial
 
 import wootpaste.blueprint as blueprint
 from wootpaste.config import config
 from wootpaste import mail
+from wootpaste.models import Paste
 from wootpaste.utils.filters import ViewFilters
 
-from flask import Flask, g
+from flask import Flask, g, redirect
 from flask_wtf.csrf import CsrfProtect
 from flask.ext.assets import Environment, Bundle
 from webassets.filter import get_filter
@@ -34,6 +36,10 @@ def create_app():
     assets.register('js_all', js_bundle)
 
     blueprint.register(app)
+
+    for paste in Paste.query.filter_by(legacy=True).all():
+        route = u'/' + paste.key
+        app.add_url_rule(route, 'legacy_show_'+paste.key, partial(redirect, '/paste/' + paste.key))
 
     return app
 
