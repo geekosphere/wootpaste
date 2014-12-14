@@ -108,7 +108,7 @@ class PasteHelper(object):
         message = ''
         template = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../views/irc_announce')
         with codecs.open(template, 'r', 'utf-8') as f:
-            message = re.sub(r'\s{2,}', u' ', Template(f.read()).render(paste=paste))
+            message = re.sub(r'\s{2,}', u' ', Template(f.read()).render(paste=paste, url=request.host_url))
 
         c = config['irc_announce']
         requests.post(c['uri'], data={

@@ -18,5 +18,5 @@
 
 {% endif %}
 
-- http://example.com/paste/{{ paste.key }}
+- {{ url }}paste/{{ paste.key }}
 
