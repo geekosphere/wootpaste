@@ -8,7 +8,7 @@
     <li><a href="{{ url_for('frontend.login') }}">login</a></li>
     {% endif %}
     {% if 'username' in session %}
-    <li>logged in as <a href="{{ url_for('frontend.user_paste_index', username=session['username']) }}">{{ session['username'] }}</a></li>
+    <li><span>logged in as <a href="{{ url_for('frontend.user_paste_index', username=session['username']) }}">{{ session['username'] }}</a></span></li>
     <li><a href="{{ url_for('frontend.logout') }}">logout</a></li>
     {% endif %}
   </ul>
