@@ -77,7 +77,7 @@ def paste_create():
         if request.form.get('subject', '') != '':
             log.info('blocked spam, detected non-empty hidden field')
             raise SpamDetected()
-        if config['akismet_key']:
+        if config['akismet_key'] and not g.user:
             if AkismetHelper.check_spam(form.content):
                 raise SpamDetected()
         paste = Paste()
