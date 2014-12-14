@@ -1,21 +1,17 @@
+# -*- coding: utf-8 -*-
 
-import sys
+from unittest import TestCase
 import os
 
 os.environ['ENV'] = 'test'
 
-from os.path import join, dirname, abspath, realpath
-sys.path.append(realpath(join(dirname(abspath(__file__)), '..')))
-
 from wootpaste.app import create_app
-from wootpaste.database import engine, db_session, Base
+from wootpaste.database import engine, Base
 
-app = create_app()
-client = app.test_client()
+class AppTestCase(TestCase):
 
-def setUpPackage():
-    Base.metadata.create_all(bind=engine)
-
-def tearDownPackage():
-    pass
+    @classmethod
+    def setup_class(klass):
+        Base.metadata.create_all(bind=engine)
+        klass.app = create_app()
 
