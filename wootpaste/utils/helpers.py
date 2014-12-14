@@ -194,10 +194,10 @@ class AkismetHelper(object):
         url = 'http://%s.rest.akismet.com/1.1/comment-check' % (config['akismet_key'], )
         data = {
                 'blog': request.url,
-                'user_ip': request.remote_addr,
+                'user_ip': '127.0.0.1',
                 'user_agent': request.headers['User-Agent'],
                 'referrer': request.referrer,
-                'comment_content': content
+                'comment_content': unicode(content)
                 }
         res = requests.post(url, data=data)
         log.debug('spam detection using akismet, returned response code %d: %s' % (res.status_code, res.text))
