@@ -200,7 +200,7 @@ class AkismetHelper(object):
                 'comment_content': content
                 }
         res = requests.post(url, data=data)
-        log.debug('spam detection using akismet, returned response code %d: %s' % (res.status_code, res.text)
+        log.debug('spam detection using akismet, returned response code %d: %s' % (res.status_code, res.text))
         if res.status_code == 200:
             return 'true' in res.text
         return False
