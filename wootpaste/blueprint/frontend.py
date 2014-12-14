@@ -23,7 +23,7 @@ import datetime
 import pytz
 import json
 import logging
-log = logging.getLogger('wootpaste')
+logger = logging.getLogger('wootpaste')
 
 blueprint = Blueprint('frontend', __name__, template_folder='templates')
 
@@ -58,6 +58,7 @@ def page_not_found(error):
 
 @blueprint.errorhandler(WootpasteError)
 def custom_error(error):
+    logger.error('application error: {}'.format(error.message))
     return render_template('error500.html', error=error), 500
 
 """
@@ -73,9 +74,7 @@ def handle_invalid_usage(error):
 def paste_create():
     form = PasteForm(request.form)
     if request.method == 'POST' and form.validate():
-        log.debug('create field data: ' + json.dumps(request.form))
         if request.form.get('subject', '') != '':
-            log.info('blocked spam, detected non-empty hidden field')
             raise SpamDetected()
         if config['akismet_key'] and not g.user:
             if AkismetHelper.check_spam(form.content):
@@ -96,6 +95,9 @@ def paste_create():
         paste.owner_user = SessionHelper.get_user_model()
         db_session.add(paste)
         db_session.commit()
+
+        logger.info('paste created with key = {}'.format(paste.key))
+
         if form.irc_announce.data and config['irc_announce.active']:
             PasteHelper.irc_announce(paste)
         url = url_for('frontend.paste_show', key=paste.key)
@@ -117,8 +119,11 @@ def paste_update(key):
     form = PasteForm(request.form, obj=paste)
     if request.method == 'POST' and form.validate():
         form.populate_obj(paste)
-        paste.updated_at = pytz.utc.localize(datetime.datetime.utcnow()) 
+        paste.updated_at = utcnow()
         db_session.commit()
+
+        logger.info('paste updated, key = {}'.format(paste.key))
+
         url = url_for('frontend.paste_show', key=paste.key)
         if request.is_xhr:
             return jsonify(url=url, key=paste.key)
@@ -134,6 +139,7 @@ def paste_delete(key):
     if request.method == 'POST':
         db_session.delete(paste)
         db_session.commit()
+        logger.info('paste deleted, key = {}'.format(key))
         return redirect(url_for('frontend.paste_index'))
 
     return render_template('paste/delete.html', paste=paste)
@@ -195,6 +201,9 @@ def signup():
         user.settings = SessionHelper.get_settings_string()
         db_session.add(user)
         db_session.commit()
+
+        logger.info('user signup, username = {}'.format(user.username))
+
         return redirect(url_for('frontend.login'))
     return render_template('user/signup.html', form=form)
 
@@ -204,12 +213,14 @@ def login():
     if request.method == 'POST' and form.validate():
         user = User.query.filter_by(username=form.username.data).one()
         session['username'] = user.username
+        logger.info('user logged in, username = {}'.format(user.username))
         return redirect(url_for('frontend.paste_create'))
     return render_template('user/login.html', form=form)
 
 @blueprint.route('/logout', methods=['GET', 'POST'])
 def logout():
     if 'username' in session:
+        logger.info('user logged out, username = {}'.format(session['username']))
         session.clear()
         return redirect(url_for('frontend.paste_create'))
 
@@ -233,6 +244,8 @@ def password_reset():
         msg.body = config['password_reset.content'].format(token=token, url=url)
         mail.send(msg)
 
+        logger.info('user password reset, sent token to {} for user {}'.format(user.email, user.username))
+
         return redirect(url_for('frontend.password_reset2'))
     return render_template('user/reset.html', form=form)
 
@@ -248,7 +261,9 @@ def password_reset2():
 
         # store encrypted (bcrypt) password
         token.user.password = PasswordHelper.encrypt(form.password.data)
-        token.user.updated_at = pytz.utc.localize(datetime.datetime.utcnow()) 
+        token.user.updated_at = utcnow()
+
+        logger.info('user password reset, token accepted, password reset for user {}'.format(token.user.username))
 
         db_session.delete(token)
         db_session.commit()
@@ -268,7 +283,7 @@ def settings():
         user = SessionHelper.get_user_model()
         if user:
             user.settings = SessionHelper.get_settings_string()
-            user.updated_at = pytz.utc.localize(datetime.datetime.utcnow()) 
+            user.updated_at = utcnow()
             db_session.add(user)
             db_session.commit()
         return redirect(url_for('frontend.paste_index'))

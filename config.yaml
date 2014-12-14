@@ -76,7 +76,7 @@ paste:
 # the following options are merged with the flask instance's config:
 #  flask makes those options available in jinja2 templates using config['TITLE'] etc.
 flask:
-  DEBUG: true
+  DEBUG: false
   TITLE: 'your wootpaste instance title'
   SECRET_KEY: 'if you dont change this you get hacked!'
   SESSION_COOKIE_NAME: 'wps'
