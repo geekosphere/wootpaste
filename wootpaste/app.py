@@ -7,6 +7,7 @@ import wootpaste.blueprint as blueprint
 from wootpaste.config import config
 from wootpaste import mail
 from wootpaste.models import Paste
+from wootpaste.database import db_session
 from wootpaste.utils.filters import ViewFilters
 
 from flask import Flask, g, redirect
@@ -37,7 +38,7 @@ def create_app():
 
     blueprint.register(app)
 
-    for paste in Paste.query.filter_by(legacy=True).all():
+    for paste in db_session.query(Paste.key).filter_by(legacy=True).all():
         route = u'/' + paste.key
         app.add_url_rule(route, 'legacy_show_'+paste.key, partial(redirect, '/paste/' + paste.key))
 
