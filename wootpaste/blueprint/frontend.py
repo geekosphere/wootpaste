@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from forms import *
-from errors import PasteExpired, PasteNotFound
+from errors import *
 
 from wootpaste import mail
 from wootpaste.database import db_session
@@ -56,9 +56,9 @@ def teardown_request(exception):
 def page_not_found(error):
     return render_template('error404.html'), 404
 
-@blueprint.errorhandler(PasteExpired)
-def paste_expired(error):
-    return render_template('error_expired.html'), 500
+@blueprint.errorhandler(WootpasteError)
+def custom_error(error):
+    return render_template('error500.html', error=error), 500
 
 """
 for the REST API:
@@ -76,7 +76,10 @@ def paste_create():
         log.debug('create field data: ' + json.dumps(request.form))
         if request.form.get('subject', '') != '':
             log.info('blocked spam, detected non-empty hidden field')
-            return redirect('/')
+            raise SpamDetected()
+        if config['akismet_key']:
+            if AkismetHelper.check_spam(form.content):
+                raise SpamDetected()
         paste = Paste()
         form.populate_obj(paste)
         if paste.encrypted:

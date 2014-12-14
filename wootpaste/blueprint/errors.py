@@ -1,5 +1,8 @@
 
-class PasteExpired(Exception):
+class WootpasteError(Exception):
+    pass
+
+class PasteExpired(WootpasteError):
     status_code = 500
 
     def __init__(self):
@@ -12,7 +15,20 @@ class PasteExpired(Exception):
         rv['message'] = self.message
         return rv
 
-class PasteNotFound(Exception):
+class SpamDetected(WootpasteError):
+    status_code = 500
+
+    def __init__(self):
+        Exception.__init__(self)
+        self.message = 'This is spam go fuck yourself!'
+
+    def to_dict(self):
+        # rv = dict(self.payload or ())
+        rv = {}
+        rv['message'] = self.message
+        return rv
+
+class PasteNotFound(WootpasteError):
     status_code = 500
 
     def __init__(self):

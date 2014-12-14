@@ -18,12 +18,15 @@ from wootpaste.models import *
 from wootpaste.utils import dict_merge
 from wootpaste.config import config
 
-from flask import g, session
+from flask import g, session, request
 from passlib.context import CryptContext
 
 from jinja2 import Template
 
 import requests
+
+import logging
+log = logging.getLogger('wootpaste')
 
 def get_token(length):
     return ''.join([random.choice(string.ascii_letters+string.digits)
@@ -184,4 +187,22 @@ class PasswordHelper(object):
     @staticmethod
     def verify(plain, hash):
         return PasswordHelper.context.verify(plain, hash)
+
+class AkismetHelper(object):
+    @staticmethod
+    def check_spam(content):
+        url = 'http://%s.rest.akismet.com/1.1/comment-check' % (config['akismet_key'], )
+        data = {
+                'blog': request.url,
+                'user_ip': request.remote_addr,
+                'user_agent': request.headers['User-Agent'],
+                'referrer': request.referrer,
+                'comment_content': content
+                }
+        res = requests.post(url, data=data)
+        log.debug('spam detection using akismet, returned response code ' + str(res.status_code))
+        if res.status_code == 200:
+            return 'true' in res.text
+        return False
+
 
