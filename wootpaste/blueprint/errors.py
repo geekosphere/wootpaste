@@ -7,7 +7,7 @@ class PasteExpired(WootpasteError):
 
     def __init__(self):
         Exception.__init__(self)
-        self.message = 'Paste expired.'
+        self.message = 'The paste you\'re looking at expired.'
 
     def to_dict(self):
         # rv = dict(self.payload or ())
@@ -20,7 +20,7 @@ class SpamDetected(WootpasteError):
 
     def __init__(self):
         Exception.__init__(self)
-        self.message = 'This is spam go fuck yourself!'
+        self.message = 'The paste you submitted was detected as spam, if this is a false positive try to login or paste it privatly.'
 
     def to_dict(self):
         # rv = dict(self.payload or ())

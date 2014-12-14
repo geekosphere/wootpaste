@@ -76,7 +76,8 @@ def paste_create():
     if request.method == 'POST' and form.validate():
         if request.form.get('subject', '') != '':
             raise SpamDetected()
-        if config['akismet_key'] and not g.user:
+        # only test using akismet if key configured, not logged in and not private paste
+        if config['akismet_key'] and not g.user and not form.private.data:
             if AkismetHelper.check_spam(form.content):
                 raise SpamDetected()
         paste = Paste()
