@@ -2,7 +2,7 @@
 {% block title %}Password Reset{% endblock %}
 {% block body %}
 
-<p>Give a username or email to reset the password.</p>
+<p>Give a username to reset the password.</p>
 
 <form method="POST" action="{{ url_for('frontend.password_reset') }}">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> 
@@ -17,7 +17,7 @@
     </ul>
   {% endif %}
 
-  <label for="username">Username/Email</label>
+  <label for="username">Username</label>
   <div>
     {{ form.username(class='autofocus', autofocus=True) }}
   </div>

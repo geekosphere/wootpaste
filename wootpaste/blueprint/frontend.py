@@ -181,7 +181,7 @@ def user_paste_index(username=None, private=None):
             join(User).filter(User.username == username)
 
     if private != None:
-        pastes = pastes.filter_by(private=private)
+        pastes = pastes.filter(Paste.private == private)
 
     return render_template('paste/index.html', pastes=Pagination(pastes))
 
@@ -229,8 +229,7 @@ def logout():
 def password_reset():
     form = PasswordResetForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = User.query.filter((User.username==form.username.data) |
-            (User.email==form.username.data)).one()
+        user = User.query.filter(User.username == form.username.data).one()
 
         token = get_token(32)
         base_url = request.host_url.rstrip('/')

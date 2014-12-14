@@ -14,14 +14,11 @@ class SignupForm(Form):
     def username_free_check(form, field):
         if User.query.filter_by(username=field.data).count():
             raise ValidationError('Username already taken!')
-    def email_free_check(form, field):
-        if User.query.filter_by(email=field.data).count():
-            raise ValidationError('Email already taken!')
 
     username = StringField(u'Username', validators=[InputRequired(), length(max=30), username_free_check, Regexp(r'^[a-zA-Z0-9_\-]{2,}$')])
     password = PasswordField('Password', validators=[InputRequired(), EqualTo('confirm', message='Passwords must match')])
     confirm  = PasswordField('Confirm Password')
-    email = StringField(u'eMail (optional)', validators=[Email(), optional(), length(max=1024), email_free_check])
+    email = StringField(u'eMail (optional)', validators=[Email(), optional(), length(max=1024)])
 
 class LoginForm(Form):
     def password_check(form, field):
@@ -34,8 +31,7 @@ class LoginForm(Form):
 
 class PasswordResetForm(Form):
     def username_exists_check(form, field):
-        query = User.query.filter((User.username==form.username.data) |
-            (User.email==form.username.data))
+        query = User.query.filter(User.username == form.username.data)
         if not query.count():
             raise ValidationError('User not found!')
         if not query.one().email:

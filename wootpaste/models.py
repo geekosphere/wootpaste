@@ -91,7 +91,7 @@ class User(Base):
     id = Column(Integer(), primary_key=True)
 
     username = Column(String(30), unique=True)
-    email = Column(String(1024), unique=True)
+    email = Column(String(1024))
     password = Column(String(2049))
 
     # admins can manage users, delete pastes, etc.
