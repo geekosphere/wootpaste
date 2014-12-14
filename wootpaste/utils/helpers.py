@@ -26,7 +26,7 @@ from jinja2 import Template
 import requests
 
 import logging
-log = logging.getLogger('wootpaste')
+logger = logging.getLogger('wootpaste')
 
 def get_token(length):
     return ''.join([random.choice(string.ascii_letters+string.digits)
@@ -199,10 +199,14 @@ class AkismetHelper(object):
                 'referrer': request.referrer,
                 'comment_content': unicode(content)
                 }
-        res = requests.post(url, data=data)
-        log.debug('spam detection using akismet, returned response code %d: %s' % (res.status_code, res.text))
-        if res.status_code == 200:
-            return 'true' in res.text
+        try:
+            res = requests.post(url, data=data)
+            logger.debug('spam detection using akismet, returned response code %d: %s' % (res.status_code, res.text))
+            if res.status_code == 200:
+                return 'true' in res.text
+        except Exception as e:
+            logger.error(e)
+            return False
         return False
 
 
