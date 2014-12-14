@@ -2,11 +2,13 @@
 
 from wootpaste.config import config
 from wootpaste.database import Base
+from wootpaste.utils import utcnow
 
 from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Boolean, DateTime, TypeDecorator
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 import datetime
+from datetime import timedelta
 import pytz
 
 class UTCDateTime(TypeDecorator):
@@ -61,6 +63,13 @@ class Paste(Base):
     owner_session = Column(String(40))
     owner_user_id = Column(Integer(), ForeignKey('user.id'))
     owner_user = relationship('User', backref='pastes')
+
+    @property
+    def expire_at(self):
+        return self.created_at + timedelta(seconds=self.expire_in)
+
+    def is_expired(self):
+        return utcnow() > self.expire_at
 
     def must_truncate(self):
         return len(self.content.split('\n')) > config['paste.max_lines']

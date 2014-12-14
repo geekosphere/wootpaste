@@ -5,6 +5,12 @@ from flask import request
 import urlparse
 import urllib
 import math
+import datetime
+import pytz
+
+def utcnow():
+    """A timezone aware version of datetime.utcnow()"""
+    return datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
 
 def dict_merge(a, b):
     '''recursively merges dict's. not just simple a['key'] = b['key'], if
