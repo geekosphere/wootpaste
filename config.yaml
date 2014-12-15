@@ -80,6 +80,7 @@ flask:
   TITLE: 'your wootpaste instance title'
   SECRET_KEY: 'if you dont change this you get hacked!'
   SESSION_COOKIE_NAME: 'wps'
+  PERMANENT_SESSION_LIFETIME: 31536000
   MAIL_SERVER: 'mail.example.org'
   MAIL_PORT: 25
   MAIL_USE_TLS: false

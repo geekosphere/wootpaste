@@ -29,6 +29,7 @@ blueprint = Blueprint('frontend', __name__, template_folder='templates')
 
 @blueprint.before_request
 def before_request():
+    session.permanent = True
     # load default settings,
     #   current settings merged with defaults or
     #       user settings merged with defaults
