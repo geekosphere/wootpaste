@@ -41,18 +41,24 @@ def process_paste(old):
     keys = ('id', 'secret', 'username', 'summary', 'content', 'expire', 'created', 'encrypted', 'language', 'private', 'status')
     opaste = dict(zip(keys, old))
     try:
-        nkey = opaste['id'] 
+        nkey = opaste['id']
+        if opaste['status'] == 2:
+            nkey = 'spam_' + nkey
         if Paste.query.filter_by(key=nkey).count() > 0:
             print 'ignored existing paste with id='+nkey
             return
 
         npaste = Paste()
+        npaste.spam = opaste['status'] == 2
         npaste.key = nkey
         npaste.legacy = True
         npaste.secret = opaste['secret']
         npaste.private = to_bool(opaste['private'])
         npaste.encrypted = to_bool(opaste['encrypted'])
-        npaste.title = opaste['summary']
+        if not opaste['summary']:
+            npaste.title = None
+        else:
+            npaste.title = opaste['summary'][:1000]
         npaste.content = opaste['content']
         npaste.created_at = datetime.datetime.utcfromtimestamp(opaste['created']/1000)
         olang = opaste['language']
@@ -72,6 +78,6 @@ def process_paste(old):
         print 'unable to create old id=' + opaste['id']
 
 old = sqlite3.connect(ANPASTE_DB)
-map(process_paste, old.execute('SELECT * FROM paste WHERE status <> 2'))
+map(process_paste, old.execute('SELECT * FROM paste'))
 db_session.commit()
 

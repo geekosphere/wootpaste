@@ -56,6 +56,9 @@ class Paste(Base):
     # a pygments lexer type
     language = Column(String(128))
 
+    # marked as spam
+    spam = Column(Boolean(), default=False)
+
     visits = Column(Integer(), default=0)
     visits_rel = relationship('PasteVisit', cascade='all, delete-orphan')
 
