@@ -24,7 +24,7 @@ class ConfigAccessor(object):
 
     def __getitem__(self, key):
         """Allows to use dot syntax in array accessor operator [] for read access.
-        
+
         Like ``config['database.uri']`` to access ``self._data['database']['uri']``.
         """
         return reduce(lambda d, k: d[k], key.split('.'), self._data)

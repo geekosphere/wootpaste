@@ -21,7 +21,6 @@ logger = logging.getLogger('wootpaste')
 @manager.command
 def cleanup():
     """Removes expired pastes and old visit logs from the database.
-
     Should be called periodically to cleanup the database.
     """
     delete_expired_pastes()
@@ -49,14 +48,14 @@ if config['paste.spam_ml']:
     def spam_evaluate():
         """Evaluates the model used for paste spam detection."""
         print 'Running evaluation... '
-        avg = spam.evaluate()
+        avg = spam_ml.evaluate()
         print 'Average Score: ' + str(avg)
 
     @manager.command
     def spam_train():
         """Trains the model used for paste spam detection."""
         print 'Training running...'
-        spam.train()
+        spam_ml.train()
 
 if __name__ == "__main__":
     manager.run()

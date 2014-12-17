@@ -1,7 +1,6 @@
-\#wootpaste
-===========
+# wootpaste - python/flask pastebin
 
-This is the source code for the [paste.geekosphere.org](https://paste.geekosphere.org) pastebin. It is strong-copyleft licensed under the Affero General Public License Version 3.
+This is the source code for the [paste.geekosphere.org](https://paste.geekosphere.org) pastebin, licensed under the [Affero General Public License Version 3](http://www.gnu.org/licenses/agpl-3.0.html). [Affero General Public License](http://www.gnu.org/licenses/agpl-3.0.html), Version 3.
 
 ## Install
 
@@ -29,4 +28,12 @@ CREATE DATABASE wootpaste;
 GRANT ALL PRIVILEGES ON DATABASE wootpaste to wootpaste;
 ```
 
+## Dependencies for spam detection
+
+```
+pip install numpy
+pip install cython
+pip install git+http://github.com/scipy/scipy/
+pip install scikit-learn
+```
 
