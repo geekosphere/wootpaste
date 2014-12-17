@@ -70,11 +70,7 @@ class PasteForm(Form):
 
         # check for random pattern in title:
         if re.match(r'(\w*[A-Z][a-z]\w*|\w*[a-z][A-Z]\w*){2}', form.title.data):
-            raise SpamDetected() 
-
-        # check akismet for spam:
-        if config['akismet_key'] and AkismetHelper.check_spam(form.content.data):
-            raise SpamDetected() 
+            raise SpamDetected()
 
     private = BooleanField(u'private')
     irc_announce = BooleanField(u'announce')
