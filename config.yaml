@@ -45,7 +45,6 @@ logger:
       level      : DEBUG
       stream     : ext://sys.stdout
 paste:
-  block_links: true
   max_lines: 30
   primary_languages:
     - auto 
