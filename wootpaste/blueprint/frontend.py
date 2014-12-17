@@ -81,7 +81,7 @@ def paste_create():
         if config['akismet_key'] and not g.user and not form.private.data:
             if AkismetHelper.check_spam(form.content):
                 raise SpamDetected()
-        if config['paste.block_links'] and '<a href="' in form.content.data and not g.user and not form.private.data:
+        if config['paste.block_links'] and '<a href="' in form.content.data:
             raise SpamDetected()
         paste = Paste()
         form.populate_obj(paste)
