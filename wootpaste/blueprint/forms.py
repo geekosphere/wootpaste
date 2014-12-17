@@ -10,6 +10,10 @@ from wtforms.validators import *
 from datetime import timedelta
 import datetime
 
+class SpamDetected(ValidationError):
+    def __init__(self):
+        ValidationError.__init__(self, 'The paste you submitted was detected as spam, if this is a false positive, try to login or paste it privatly.')
+
 class SignupForm(Form):
     def username_free_check(form, field):
         if User.query.filter_by(username=field.data).count():
@@ -55,6 +59,23 @@ class SettingsForm(Form):
     pygment_linenos = BooleanField(u'Line numbers')
 
 class PasteForm(Form):
+    def spam_check(form, field):
+        # no spam detection for registered users or private pastes:
+        if form.private.data or g.user:
+            return
+
+        # invisible field was filled-in (by a bot)
+        if request.form.get('subject', '') != '':
+            raise SpamDetected()
+
+        # check for random pattern in title:
+        if re.match(r'(\w*[A-Z][a-z]\w*|\w*[a-z][A-Z]\w*){2}', form.title.data):
+            raise SpamDetected() 
+
+        # check akismet for spam:
+        if config['akismet_key'] and AkismetHelper.check_spam(form.content.data):
+            raise SpamDetected() 
+
     private = BooleanField(u'private')
     irc_announce = BooleanField(u'announce')
     encrypted = BooleanField(u'client-side encrypted')
@@ -71,7 +92,8 @@ class PasteForm(Form):
         (int(timedelta(weeks=4*3).total_seconds()), 'three months'),
         (int(timedelta(weeks=4*6).total_seconds()), 'six months'),
         (int(timedelta(days=365).total_seconds()), 'a year'),
-        (int(timedelta(days=365*2).total_seconds()), 'two years')], coerce=int)
+        (int(timedelta(days=365*2).total_seconds()), 'two years')], coerce=int,
+        validators=[optional()])
     expire_views = SelectField(u'expire after', choices=[
         (0, 'never'),
         (2, '2 views'),
@@ -81,9 +103,9 @@ class PasteForm(Form):
         (10, '10 views'),
         (50, '50 views'),
         (1000, '1000 views'),
-        ], coerce=int)
+        ], coerce=int, validators=[optional()])
     title = StringField(u'Title', validators=[optional(), length(max=1024)])
-    content = TextAreaField(u'Content', validators=[required()])
+    content = TextAreaField(u'Content', validators=[required(), spam_check])
     language = SelectField(u'Language', choices=PasteHelper.get_languages())
     xkcd_ids = BooleanField(u'xkcd-style ids')
 
