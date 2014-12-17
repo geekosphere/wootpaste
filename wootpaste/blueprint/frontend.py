@@ -96,8 +96,7 @@ def paste_create():
         db_session.add(paste)
 
         if (not g.user or not paste.private) and \
-                config['paste.spam_ml'] and \
-                spam_ml.predict(form.content.data) == spam_ml.SPAM:
+                config['paste.spam_ml'] and spam_ml.predict(form.content.data) == spam_ml.SPAM:
             paste.spam = True
             db_session.commit()
             raise SpamDetected()

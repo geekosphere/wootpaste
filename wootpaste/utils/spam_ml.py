@@ -43,8 +43,11 @@ def load():
     """Loads a pre-trained model."""
     global model
     logger.info('spam_ml loads a model')
-    model = pickle.load(open(model_file, 'r'))
-    logger.info('spam_ml finished loading model')
+    try:
+        model = pickle.load(open(model_file, 'r'))
+        logger.info('spam_ml finished loading model')
+    except:
+        logger.info('spam_ml error not loaded')
 
 def predict(content):
     """Predicts if content is spam or not."""
