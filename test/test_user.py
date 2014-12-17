@@ -28,7 +28,6 @@ class UserTestCase(AppTestCase):
             rv = c.post('/signup', data=dict(username='dupl', password='bar', confirm='bar'))
             assert 'Username already taken!' not in rv.data
             rv = c.post('/signup', data=dict(username='dupl', password='bar', confirm='bar'))
-            print rv.data
             assert 'Username already taken!' in rv.data
 
     def test_password_reset(self):

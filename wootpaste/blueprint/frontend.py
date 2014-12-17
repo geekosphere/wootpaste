@@ -161,7 +161,10 @@ def paste_show(key, mode):
 
 @blueprint.route('/list')
 def paste_index():
-    pastes = Paste.query.filter_by(private=False, encrypted=False, spam=False).order_by(Paste.created_at.desc())
+    pastes = Paste.query.\
+        filter_by(private=False, encrypted=False).\
+        filter((Paste.spam == None) | (Paste.spam == False)).\
+        order_by(Paste.created_at.desc())
 
     return render_template('paste/index.html', pastes=Pagination(pastes))
 

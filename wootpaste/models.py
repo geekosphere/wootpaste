@@ -38,8 +38,8 @@ class Paste(Base):
     created_at = Column(UTCDateTime, default=datetime.datetime.utcnow)
     updated_at = Column(UTCDateTime)
 
-    private = Column(Boolean())
-    encrypted = Column(Boolean())
+    private = Column(Boolean(), default=False)
+    encrypted = Column(Boolean(), default=False)
 
     legacy = Column(Boolean(), default=False)
 
@@ -47,14 +47,14 @@ class Paste(Base):
     view_count = Column(Integer(), default=0)
 
     # kill-options when this paste should self-destruct
-    expire_in = Column(Integer())
-    expire_views = Column(Integer())
+    expire_in = Column(Integer(), default=0)
+    expire_views = Column(Integer(), default=0)
 
     title = Column(String(1024))
     content = Column(Text())
 
     # a pygments lexer type
-    language = Column(String(128))
+    language = Column(String(128), default='auto')
 
     # marked as spam
     spam = Column(Boolean(), default=False)
