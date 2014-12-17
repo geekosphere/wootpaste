@@ -3,11 +3,14 @@
 from forms import *
 from errors import *
 
-from wootpaste import mail
+from wootpaste import mail, config
 from wootpaste.database import db_session
 from wootpaste.models import *
 from wootpaste.utils.helpers import *
 from wootpaste.utils import *
+
+if config['paste.spam_ml']:
+    import wootpaste.utils.spam_ml as spam_ml
 
 from flask import Response, Blueprint, g, jsonify, abort, request,\
     redirect, render_template, url_for, session
@@ -75,6 +78,7 @@ def handle_invalid_usage(error):
 def paste_create():
     form = PasteForm(request.form)
     if request.method == 'POST' and form.validate():
+
         paste = Paste()
         form.populate_obj(paste)
         if paste.encrypted:
@@ -90,6 +94,11 @@ def paste_create():
         paste.owner_session = SessionHelper.get_session_id(session)
         paste.owner_user = SessionHelper.get_user_model()
         db_session.add(paste)
+
+        if config['paste.spam_ml'] and spam_ml.predict(form.content.data) == spam_ml.SPAM:
+            paste.spam = True
+            db_session.commit()
+            raise SpamDetected()
         db_session.commit()
 
         logger.info('paste created with key = {}'.format(paste.key))

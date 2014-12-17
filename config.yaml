@@ -45,6 +45,7 @@ logger:
       level      : DEBUG
       stream     : ext://sys.stdout
 paste:
+  spam_ml: false
   max_lines: 30
   primary_languages:
     - auto 
