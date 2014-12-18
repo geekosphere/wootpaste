@@ -19,8 +19,8 @@
         <li>
           created at <a href="{{ url_for('frontend.paste_show', key=paste.key) }}" class="paste_date dark_link">{{ paste.created_at|format_date }}</a>
           {% if paste.owner_user and not paste.owner_user_hidden %}
-          by <a href="{{ url_for('frontend.user_paste_index', username=paste.owner_user.username) }}"
-            title="Show all pasts from {{paste.owner_user.username}}" class="dark_link">{{ paste.owner_user.username }}</a>
+          by <a href="{{ url_for('frontend.user_paste_index', username=paste.owner_user.username, private=(None if paste.owner_user==g.user else False)) }}"
+            title="Show all pasts from {{paste.owner_user.username}}">{{ paste.owner_user.username }}</a>
           {% endif %}
         </li>
 
