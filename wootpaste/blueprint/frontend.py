@@ -235,7 +235,7 @@ def logout():
     if 'username' in session:
         logger.info('user logged out, username = {}'.format(session['username']))
         session.clear()
-        return redirect(url_for('frontend.paste_create'))
+    return redirect(url_for('frontend.paste_create'))
 
 @blueprint.route('/reset', methods=['GET', 'POST'])
 def password_reset():
