@@ -104,4 +104,5 @@ class PasteForm(Form):
     content = TextAreaField(u'Content', validators=[required(), spam_check])
     language = SelectField(u'Language', choices=PasteHelper.get_languages())
     xkcd_ids = BooleanField(u'xkcd-style ids')
+    owner_user_hidden = BooleanField(u'post anonymous')
 

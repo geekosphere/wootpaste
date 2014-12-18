@@ -46,6 +46,9 @@
         <label>{{ form.irc_announce }} announce in {{ g.config.irc_announce.channel }}</label>
         {% endif %}
         <label>{{ form.private }} create a private, unlisted paste</label>
+        {% if g.user %}
+        <label>{{ form.owner_user_hidden }} hide username for this paste</label>
+        {% endif %}
       </div>
     </div>
 

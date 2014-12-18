@@ -67,6 +67,9 @@ class Paste(Base):
     owner_user_id = Column(Integer(), ForeignKey('user.id'))
     owner_user = relationship('User', backref='pastes')
 
+    # if the owner's name is private/hidden
+    owner_user_hidden = Column(Boolean(), default=False)
+
     @property
     def expire_at(self):
         return self.created_at + timedelta(seconds=self.expire_in)

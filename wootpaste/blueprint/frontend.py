@@ -182,14 +182,18 @@ def paste_index():
 @blueprint.route('/user/<username>/private', defaults={'private': True})
 @blueprint.route('/user/<username>/all', defaults={'private': None})
 def user_paste_index(username=None, private=None):
-    if not g.user or g.user.username != username and private != False:
-        if not g.is_admin: return redirect(url_for('frontend.login'))
+    if private == None or private == True:
+        # only allow the same user to see his private pastes
+        if not g.user or g.user.username != username:
+            return redirect(url_for('frontend.user_paste_index', username=username, private=False))
 
-    pastes = Paste.query.filter_by(encrypted=False).order_by(Paste.created_at.desc()).\
-            join(User).filter(User.username == username)
+    pastes = Paste.query.filter_by(encrypted=False).order_by(Paste.created_at.desc()).join(User).filter(User.username == username)
 
     if private != None:
         pastes = pastes.filter(Paste.private == private)
+
+    if not g.user:
+        pastes = pastes.filter((Paste.owner_user_hidden==None)|(Paste.owner_user_hidden==False))
 
     return render_template('paste/index.html', pastes=Pagination(pastes))
 
