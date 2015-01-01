@@ -132,7 +132,7 @@ wootpaste.decryptContent = function () {
     var encrypted = $('.encrypted_content').html();
     //console.log(encrypted);
     //console.log(wootpaste.passphrase);
-    $('.encrypted_content').html(sjcl.decrypt(wootpaste.passphrase, encrypted));
+    $('.encrypted_content').text(sjcl.decrypt(wootpaste.passphrase, encrypted));
   }
 };
 

@@ -59,6 +59,10 @@ class SettingsForm(Form):
     pygment_linenos = BooleanField(u'Line numbers')
 
 class PasteForm(Form):
+    def valid_encryption_check(form, field):
+        if field.data and not re.match(r'^[\w{}":,+/=]+$', form.content.data):
+            raise ValidationError('Invalid encrypted content!')
+
     def spam_check(form, field):
         # no spam detection for registered users or private pastes:
         if form.private.data or g.user:
@@ -74,7 +78,7 @@ class PasteForm(Form):
 
     private = BooleanField(u'private')
     irc_announce = BooleanField(u'announce')
-    encrypted = BooleanField(u'client-side encrypted')
+    encrypted = BooleanField(u'client-side encrypted', validators=[valid_encryption_check])
     expire_in = SelectField(u'expire in', choices=[
         (0, 'never'),
         (int(timedelta(minutes=30).total_seconds()), 'half an hour'),

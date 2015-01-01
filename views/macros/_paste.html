@@ -61,7 +61,7 @@
     {% set must_truncate = not single_paste and paste.must_truncate() %}
     {% if paste.encrypted %}
       <div class="source">
-        <pre class="encrypted_content">{{ paste.content|safe }}</pre>
+        <pre class="encrypted_content">{{ paste.content }}</pre>
       </div>
     {% else %}
       {% if must_truncate %} 
