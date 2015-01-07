@@ -12,6 +12,8 @@ wootpaste.load = function () {
 };
 
 wootpaste.init = function () {
+  wootpaste.displayQRCode();
+
   wootpaste.registerPrivateChange();
 
   if (document.location.hash.length > 1) {
@@ -169,5 +171,27 @@ wootpaste.registerPrivateChange = function () {
     change_private(set_private);
     $('input#private').prop('disabled', set_private);
   });
+};
+
+wootpaste.displayQRCode = function () {
+    var render = function () {
+        var url = window.location.href;
+        console.log(url);
+        $('#paste_qrcode').qrcode({
+            "width": 200,
+            "height": 200,
+            "color": "#3a3",
+            "text": url
+        });
+        $('#paste_qrcode_show').hide();
+    };
+    $('#paste_qrcode_show').click(function (event) {
+        wootpaste.settings.show_qrcode = true;
+        render();
+        event.preventDefault();
+    }).show();
+    if (wootpaste.settings.show_qrcode) {
+        render();
+    }
 };
 

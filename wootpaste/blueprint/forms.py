@@ -57,6 +57,7 @@ class SettingsForm(Form):
     ace = BooleanField(u'ace editor')
     pygment_style = SelectField(u'Pygments style:', choices=PasteHelper.get_all_styles())
     pygment_linenos = BooleanField(u'Line numbers')
+    show_qrcode = BooleanField(u'show qrcode')
 
 class PasteForm(Form):
     def valid_encryption_check(form, field):

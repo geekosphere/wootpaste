@@ -76,5 +76,10 @@
   {% endif %} 
 </div>
 
+{% if single_paste %}
+  <a href="#" id="paste_qrcode_show" class="hidden">show qrcode</a>
+  <div id="paste_qrcode"></div>
+{% endif %}
+
 {%- endmacro %}
 

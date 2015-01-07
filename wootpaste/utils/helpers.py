@@ -149,6 +149,7 @@ class SessionHelper(object):
                 'ace': False,
                 'pygment_style': 'trac',
                 'pygment_linenos': False,
+                'show_qrcode': False
                 }
 
         if resetDefaults:

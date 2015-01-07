@@ -29,6 +29,9 @@
   <label>{{ form.pygment_linenos }} line numbers</label>
   <p class="help">Show code with line numbers, will not break long lines.</p>
 
+  <label>{{ form.show_qrcode }} show paste qrcode</label>
+  <p class="help">Always display a qrcode with the paste url (js required).</p>
+
   {{ form.pygment_style.label }}
   {{ form.pygment_style(class='block') }}
 

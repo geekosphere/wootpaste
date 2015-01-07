@@ -47,7 +47,7 @@ def create_app():
 
     css_bundle = Bundle('style.sass', filters=css_filters, output='bundle.min.css')
     assets.register('css_all', css_bundle)
-    js_bundle = Bundle('jquery/dist/jquery.js', 'sjcl/sjcl.js', 'js/*.js', filters=js_filters, output='bundle.min.js')
+    js_bundle = Bundle('jquery/dist/jquery.js', 'sjcl/sjcl.js', 'jquery-qrcode/jquery.qrcode.min.js', 'js/*.js', filters=js_filters, output='bundle.min.js')
     assets.register('js_all', js_bundle)
 
     app.register_blueprint(Blueprint(

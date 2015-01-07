@@ -14,6 +14,6 @@
     "ace-builds": "latest",
     "jquery": "~2.1.3",
     "sjcl": "~1.0.0",
-    "qrcode": "latest"
+    "jquery-qrcode": "latest"
   }
 }
