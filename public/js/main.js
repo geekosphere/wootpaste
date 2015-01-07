@@ -177,9 +177,10 @@ wootpaste.displayQRCode = function () {
     var render = function () {
         var url = window.location.href;
         console.log(url);
+        var size = (window.location.hash.length > 1) ? 200 : 150;
         $('#paste_qrcode').qrcode({
-            "width": 200,
-            "height": 200,
+            "width": size,
+            "height": size,
             "color": "#3a3",
             "text": url
         });
