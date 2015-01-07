@@ -7,6 +7,10 @@ import urllib
 import math
 import datetime
 import pytz
+from os.path import join, dirname, abspath, realpath
+
+def approot(*path):
+    return realpath(join(dirname(abspath(__file__)), '../..', *path))
 
 def utcnow():
     """A timezone aware version of datetime.utcnow()"""

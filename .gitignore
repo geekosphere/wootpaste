@@ -9,4 +9,5 @@ local.yaml
 *.db
 *.sqlite
 .webassets-cache
+bower_components/
 

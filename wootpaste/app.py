@@ -8,16 +8,16 @@ from wootpaste.config import config
 from wootpaste import mail
 from wootpaste.models import Paste
 from wootpaste.database import db_session
+from wootpaste.utils import approot
 from wootpaste.utils.filters import ViewFilters
 
 if config['paste.spam_ml']:
     import wootpaste.utils.spam_ml as spam_ml
 
-from flask import Flask, g, redirect
+from flask import Flask, g, redirect, Blueprint
 from flask_wtf.csrf import CsrfProtect
 from flask.ext.assets import Environment, Bundle
 from webassets.filter import get_filter
-
 
 def create_app():
     app = Flask(__name__,
@@ -32,12 +32,26 @@ def create_app():
     ViewFilters.register(app)
 
     assets = Environment(app)
+    assets.load_path = [
+        app.static_folder,
+        approot('bower_components')
+    ]
     assets.url = app.static_url_path
 
-    css_bundle = Bundle('style.sass', filters='sass,cssmin', output='bundle.min.css')
+    if app.debug:
+        css_filters = 'sass,cssmin'
+        js_filters = 'jsmin'
+    else:
+        css_filters = 'sass'
+        js_filters = None
+
+    css_bundle = Bundle('style.sass', filters=css_filters, output='bundle.min.css')
     assets.register('css_all', css_bundle)
-    js_bundle = Bundle('js/*.js', output='bundle.min.js') # filters='jsmin', 
+    js_bundle = Bundle('jquery/dist/jquery.js', 'sjcl/sjcl.js', 'js/*.js', filters=js_filters, output='bundle.min.js')
     assets.register('js_all', js_bundle)
+
+    app.register_blueprint(Blueprint(
+        'bower', __name__, static_url_path='/bower', static_folder=approot('bower_components')))
 
     blueprint.register(app)
 

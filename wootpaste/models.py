@@ -14,13 +14,7 @@ import pytz
 class UTCDateTime(TypeDecorator):
     impl = DateTime
     def process_result_value(self, value, engine):
-        #s = 'notz'
-        #if value:
-        #    s = value.tzname()
-        #print 'process_result_value1 value=[%s]=%s [tz: %s]' % (str(type(value)), str(value), s)
-        if value:
-            value = pytz.utc.localize(value)
-        return value
+        return pytz.utc.localize(value) if value else value
 
     def process_bind_param(self, value, engine):
         return value
@@ -35,7 +29,7 @@ class Paste(Base):
     # owner authentication secret
     secret = Column(String(256))
 
-    created_at = Column(UTCDateTime, default=datetime.datetime.utcnow)
+    created_at = Column(UTCDateTime, default=utcnow)
     updated_at = Column(UTCDateTime)
 
     private = Column(Boolean(), default=False)
@@ -89,7 +83,7 @@ class PasteVisit(Base):
     paste_id = Column(Integer(), ForeignKey('paste.id'), primary_key=True)
     paste = relationship('Paste')
     session = Column(String(40), primary_key=True)
-    created_at = Column(UTCDateTime, default=datetime.datetime.utcnow)
+    created_at = Column(UTCDateTime, default=utcnow)
 
 class User(Base):
     __tablename__ = 'user'
@@ -106,7 +100,7 @@ class User(Base):
     # stores a json string with site settings
     settings = Column(Text())
 
-    created_at = Column(UTCDateTime, default=datetime.datetime.utcnow)
+    created_at = Column(UTCDateTime, default=utcnow)
     updated_at = Column(UTCDateTime)
 
 class UserReset(Base):
@@ -116,6 +110,6 @@ class UserReset(Base):
     user_id = Column(Integer(), ForeignKey('user.id'))
     user = relationship('User')
 
-    created_at = Column(UTCDateTime, default=datetime.datetime.utcnow)
+    created_at = Column(UTCDateTime, default=utcnow)
 
 

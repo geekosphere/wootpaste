@@ -1,5 +1,5 @@
 {% macro show_ace_editor() -%}
   <div id="content_ace"></div>
-  <script type="text/javascript" src="/js/ace-src-min-noconflict/ace.js" charset="utf-8"></script>
+  <script type="text/javascript" src="{{ url_for('bower.static', filename='ace-builds/src-min-noconflict/ace.js') }}" charset="utf-8"></script>
 {%- endmacro %}
 
