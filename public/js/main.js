@@ -162,7 +162,7 @@ wootpaste.registerPrivateChange = function () {
   $('input#encrypted').change(function (event) {
     var set_private = $(this).is(':checked');
     if (set_private) {
-      $('label input#irc_announce').parent().hide().attr('checked', false);
+      $('label input#irc_announce').attr('checked', false).parent().hide();
     }
     else {
       $('label input#irc_announce').parent().show();
