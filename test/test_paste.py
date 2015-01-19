@@ -92,25 +92,21 @@ class PasteTestCase(AppTestCase):
     def test_spam(self):
         # as a guest:
         with self.app.test_client() as c:
-            # filled invisible field:
-            rv = c.post('/', data=dict(title='foo', content='foo', subject='bar', language='auto'), follow_redirects=True)
+            rv = c.post('/', data=dict(title='foo', content='spamtest-123-Q', language='auto'), follow_redirects=True)
+            #l print rv.data
             assert 'detected as spam' in rv.data
 
-            # strange title:
-            rv = c.post('/', data=dict(title='QZUyVyetKEPQNOa', content='foo', language='auto'), follow_redirects=True)
-            assert 'detected as spam' in rv.data
-
-        # posted privatly:
+        # posted privatly should pass spam:
         with self.app.test_client() as c:
-            rv = c.post('/', data=dict(title='QZUyVyetKEPQNOa', content='foo', language='auto', private='t'), follow_redirects=True)
+            rv = c.post('/', data=dict(title='QZUyVyetKEPQNOa', content='spamtest-123-Q', language='auto', private='t'), follow_redirects=True)
             self.assertRegexpMatches(rv.data, r'<h1>\s+QZUyVyetKEPQNOa\s+</h1>')
 
-        # as a logged-in user:
+        # as a logged-in user should pass spam:
         with self.app.test_client() as c:
             c.post('/signup', data=dict(username='spamtest', password='bar', confirm='bar'))
             c.post('/login', data=dict(username='spamtest', password='bar'), follow_redirects=True)
 
-            rv = c.post('/', data=dict(title='QZUyVyetKEPQNOa', content='foo', language='auto'), follow_redirects=True)
+            rv = c.post('/', data=dict(title='QZUyVyetKEPQNOa', content='spamtest-123-Q', language='auto'), follow_redirects=True)
             self.assertRegexpMatches(rv.data, r'<h1>\s+QZUyVyetKEPQNOa\s+</h1>')
 
     def test_spam_field(self):
@@ -125,6 +121,5 @@ class PasteTestCase(AppTestCase):
             assert 'foobar2' not in c.get('/list').data
 
         # the spam marker has no other effects anywhere else
-
 
 

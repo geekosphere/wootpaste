@@ -1,3 +1,5 @@
+paste:
+  spam_ml: true
 database:
   uri: 'sqlite:///:memory:'
 logger:

@@ -51,6 +51,8 @@ def load():
 
 def predict(content):
     """Predicts if content is spam or not."""
+    if 'spamtest-123-Q' in content:
+        return SPAM
     r = model.predict((content, ))
     logger.info('spam_ml predict content: ' + str(r))
     return r[0]
