@@ -8,6 +8,9 @@ from wootpaste import mail
 from wootpaste.database import db_session
 from wootpaste.models import Paste
 
+import logging
+logger = logging.getLogger('wootpaste')
+
 class PasteTestCase(AppTestCase):
 
     def test_create_guest(self):
@@ -34,7 +37,7 @@ class PasteTestCase(AppTestCase):
             c.post('/signup', data=dict(username='tlz', password='nop', confirm='nop'))
             c.post('/login', data=dict(username='tlz', password='nop'), follow_redirects=True)
             c.post('/', data=dict(title='test_list_pub', content='bar', language='auto'), follow_redirects=True)
-            c.post('/', data=dict(title='test_list_priv', content='bar', language='auto', private='t'), follow_redirects=True)
+            c.post('/', data=dict(title='test_list_priv', content='bar', language='auto', private='y'), follow_redirects=True)
 
             rv = c.get('/user/tlz/all')
             self.assertRegexpMatches(rv.data, r'<h2><[^>]+>test_list_pub<[^>]+></h2>')
@@ -74,7 +77,7 @@ class PasteTestCase(AppTestCase):
             self.assertRegexpMatches(rv.data, r'by <a href="/user/nop/all"')
 
             # create with hidden username (should list username for this paste)
-            rv = c.post('/', data=dict(title='Hidden Username Test2', content='bar', language='auto', owner_user_hidden='t'), follow_redirects=True)
+            rv = c.post('/', data=dict(title='Hidden Username Test2', content='bar', language='auto', owner_user_hidden='y'), follow_redirects=True)
             self.assertRegexpMatches(rv.data, r'<h1>\s+Hidden Username Test2\s+</h1>')
             self.assertNotRegexpMatches(rv.data, r'by <a href="/user/nop/all"')
 
@@ -122,4 +125,16 @@ class PasteTestCase(AppTestCase):
 
         # the spam marker has no other effects anywhere else
 
+    def test_reg_edit_private(self):
+        """Tests if private pastes stay private after editing."""
+        with self.app.test_client() as c:
+            # create a private paste and get its id:
+            rv = c.post('/', data=dict(title='secrets', content='lennart is a dick', language='auto', private='t'), follow_redirects=True)
+            key = re.findall(r'href="/paste/([^"]+)"', rv.data)[0]
+            logger.info('key = ' + key)
+
+            assert 'private paste' in c.get('/paste/' + key).data
+            c.post('/edit/' + key, data=dict(title='secrets', content='systemd for world domination', language='c'))
+            assert 'systemd' in c.get('/paste/' + key).data
+            assert 'private paste' in c.get('/paste/' + key).data
 

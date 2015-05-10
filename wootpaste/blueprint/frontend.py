@@ -124,7 +124,11 @@ def paste_update(key):
     if not PasteHelper.has_permission(paste): return redirect(url_for('frontend.login')) 
     form = PasteForm(request.form, obj=paste)
     if request.method == 'POST' and form.validate():
-        form.populate_obj(paste)
+        paste.title = request.form.get('title', None)
+        paste.content = request.form.get('content', None)
+        paste.language = request.form.get('language', None)
+        paste.expire_in = request.form.get('expire_in', None)
+        paste.expire_views = request.form.get('expire_views', None)
         paste.updated_at = utcnow()
         db_session.commit()
 
