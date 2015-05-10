@@ -88,19 +88,23 @@ class PasteHelper(object):
     @staticmethod
     def add_paste_visit(paste):
         paste_expired = False
-        session_id = SessionHelper.get_session_id(session)
-        if not PasteVisit.query.filter_by(session=session_id, paste_id=paste.id).count():
-            pv = PasteVisit()
-            pv.paste_id = paste.id
-            pv.session = session_id
-            paste.visits += 1
-            if paste.expire_views != None and paste.expire_views > 1 and paste.visits > paste.expire_views: 
-                paste_expired = True
-                db_session.delete(paste)
-            else:
-                db_session.add(pv)
+        try:
+            session_id = SessionHelper.get_session_id(session)
+            if not PasteVisit.query.filter_by(session=session_id, paste_id=paste.id).count():
+                pv = PasteVisit()
+                pv.paste_id = paste.id
+                pv.session = session_id
+                paste.visits += 1
+                if paste.expire_views != None and paste.expire_views > 1 and paste.visits > paste.expire_views: 
+                    paste_expired = True
+                    db_session.delete(paste)
+                else:
+                    db_session.add(pv)
 
-        db_session.commit()
+            db_session.commit()
+            db_session.flush()
+        except:
+            db_session.rollback()
         return paste_expired
 
     @staticmethod
