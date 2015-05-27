@@ -50,9 +50,13 @@
 
         <li><a href="{{ url_for('frontend.paste_show', key=paste.key) }}" title="">view</a></li>
 
+        {% if not paste.encrypted %}
+
         <li><a href="{{ url_for('frontend.paste_show', key=paste.key, mode='raw') }}" title="">raw</a></li>
 
         <li><a href="{{ url_for('frontend.paste_show', key=paste.key, mode='download') }}" title="">download</a></li>
+
+        {% endif %}
 
       </ul>
     </div>
